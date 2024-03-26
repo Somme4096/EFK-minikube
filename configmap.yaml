@@ -2,11 +2,20 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: fluentd-config
+  name: nodejs-conf
+  namespace: kube-logging
+data:
+  nodejs.conf: |
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-conf
   namespace: kube-logging
 data:
   fluent.conf: |
     @include "#{ENV['FLUENTD_SYSTEMD_CONF'] || 'systemd'}.conf"
+    @include nodejs.conf
     @include kubernetes.conf
     @include conf.d/*.conf
 
@@ -51,6 +60,7 @@ data:
         chunk_limit_size "#{ENV['FLUENT_ELASTICSEARCH_BUFFER_CHUNK_LIMIT_SIZE'] || '2M'}"
         queue_limit_length "#{ENV['FLUENT_ELASTICSEARCH_BUFFER_QUEUE_LIMIT_LENGTH'] || '32'}"
         retry_max_interval "#{ENV['FLUENT_ELASTICSEARCH_BUFFER_RETRY_MAX_INTERVAL'] || '30'}"
+        flush_at_shutdown "#{ENV['FLUENT_ELASTICSEARCH_BUFFER_FLUSH_AT_SHUTDOWN'] || 'true'}"
         retry_forever true
       </buffer>
     </match>
