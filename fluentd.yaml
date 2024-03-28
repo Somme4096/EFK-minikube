@@ -69,6 +69,8 @@ spec:
             value: "http"
           - name: FLUENTD_SYSTEMD_CONF
             value: disable
+          - name: FLUENT_ELASTICSEARCH_BUFFER_FLUSH_AT_SHUTDOWN
+            value: true
         resources:
           limits:
             memory: 512Mi

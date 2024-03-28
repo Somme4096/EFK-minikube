@@ -6,12 +6,15 @@ metadata:
   namespace: kube-logging
 data:
   nodejs.conf: |
+    <match pattern>
+      @type stdout
+    </match>
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: fluent-conf
-  namespace: kube-logging
+  namespace: kube-loggin
 data:
   fluent.conf: |
     @include "#{ENV['FLUENTD_SYSTEMD_CONF'] || 'systemd'}.conf"
